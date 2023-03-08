@@ -1,0 +1,360 @@
+<html>
+    <head>
+        <title>Home Page </title>
+        <style>
+          body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+          .bg-text {
+  color: white;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 80%;
+  padding: 20px;
+  text-align: center;
+}
+.bg-image {
+  background-image: url("back.jpg");
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+  height: 100%; 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+li{
+  font-size: px;
+}
+
+        </style>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    </head>
+    </head>
+    <body style="background-color: rgb(253, 251, 251);">
+<nav class="navbar navbar-expand-lg" style="background-color: rgb(0, 0, 0);" >
+        <div class="container-fluid">
+            <img src="logo.jpg" wight="85px" height="85px">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="Home.html" style="color: aliceblue;">Home</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"  style="color: aliceblue;">
+                  Classes
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="FItness.html">Fitness Traning</a></li>
+                  <li><a class="dropdown-item" href="Self.html">Self Defense</a></li>
+                  </ul> 
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="Schedule.html"  style="color: aliceblue;">Schedule</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="Instructor.html"  style="color: aliceblue;">Instructor</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="Login.html"  style="color: aliceblue;">PrivacyPolicy</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="aboutus.html"  style="color: aliceblue;">About us</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="contactus.html"  style="color: aliceblue;">Contact us</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="container">
+        <h1>Dobu Mixed Martial Arts Center's members</h1>
+        <br />
+        <fieldset>
+            <legend>
+                Users List
+            </legend>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>name</th>
+                        <th>email</th>
+                        <th>Password</th>
+                        <th>gender</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tblbody">
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+    
+    <script>
+    
+    bindUserData();
+    function addUserDataToLocalStorage(userObj) {
+    
+        //already has data in localstorage then update it other create new one
+        var users = JSON.parse(localStorage.getItem('userData'));
+        if (users != null) {
+            users.push(userObj);
+           
+            localStorage.setItem('userData', JSON.stringify(users));
+        }
+        else {
+            var userData = new Array();
+            userData.push(userObj);
+            localStorage.setItem('userData', JSON.stringify(userData));
+    
+        }
+    }
+    
+    function updateDataToLocalStorage(userObj) {
+    
+        var users = JSON.parse(localStorage.getItem('userData'));
+        if (users != null) {
+            var user = users.filter((x) => x.id == userObj.id).pop();
+            if (user != null) {
+                user.name = userObj.name;
+                user.email = userObj.email;
+                user.password = userObj.password;
+                user.gender = userObj.gender;
+                
+            }
+            localStorage.setItem('userData', JSON.stringify(users));
+        }
+    }
+    
+    function deletedataFromLocalStorage(UserId) {
+    
+        var users = JSON.parse(localStorage.getItem('userData'));
+        if (users != null) {
+            users.splice(users.findIndex(a => a.id === UserId), 1)
+            localStorage.setItem('userData', JSON.stringify(users));
+        }
+    }
+    
+    
+    function bindUserData() {
+        var users = JSON.parse(localStorage.getItem('userData'));
+        if (users != null) {
+            document.getElementById('tblbody').innerHTML = "";
+            users.forEach(function (item, index) {
+                debugger;
+                var btnEditId = "btnedit" + item.id;
+                var btnDeleteId = "btndelete" + item.id;
+                var tableRow = "<tr Id='" + item.id + "'   data-CustomerID='" + item.id + "'   data-name='" + item.name + "' data-email='" + item.email + "' data-gender='" + item.gender + "'>"
+
+                    + "<td class='td-data'>" + item.name + "</td>"
+                    + "<td class='td-data'>" + item.email + "</td>"
+                    + "<td class='td-data'>" + item.password + "</td>"
+                    + "<td class='td-data'>" + item.gender + "</td>"
+                    + "<td class='td-data'>" +
+                    "<button id='" + btnEditId + "' class='btn btn-info btn-xs btn-editcustomer' onclick='showEditRow(" + item.id + ")'><i class='fa fa-pencil' aria-hidden='true'></i>Edit</button>" +
+                    "<button id='" + btnDeleteId + "' class='btn btn-danger btn-xs btn-deleteCustomer' onclick='deleteRow(" + item.id + ")'><i class='fa fa-trash' aria-hidden='true'>Delete</button>"
+                    + "</td>"
+                    + "</tr>";
+                document.getElementById('tblbody').innerHTML += tableRow;
+            })
+        }
+        var AddRow = "<tr>"
+            + "<td class='td-data'><input type='text' id='txtname' placeholder='name..'></td>"
+            + "<td class='td-data'><input type='email' id='txtemail' placeholder='email..'></td>"
+            + "<td class='td-data'><input type='password' id='txtpassword' placeholder='password..'></td>"
+            + "<td class='td-data'><select id='ddlgender'><option value='male'>male</option><option value='female'>female</option></select></td>"
+            + "<td class='td-data'>" + "<button id= 'btnaddCustomer' onclick='addUser()' class='btn btn-success'> <i class='fa fa-plus-circle' aria-hidden='true'></i>Add</button>" + "</td>"
+            + "</tr>";
+        document.getElementById('tblbody').innerHTML += AddRow;
+    }
+    
+    function GetUserID() {
+        const ID = Date.now();
+        return ID;
+    }
+    
+    function addUser() {
+        var userId = GetUserID();
+        var txtname = document.getElementById("txtname").value;
+        if (!txtname) {
+            alert('Please enter name!')
+            return false;
+        }
+        var email = document.getElementById("txtemail").value;
+        if (!email) {
+            alert('Please enter email!')
+            return false;
+        }
+        var emailfilter = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!emailfilter.test(email)) {
+            alert('Please enter a valid email address!');
+            return false;
+        }
+        var password = document.getElementById("txtpassword").value;
+        if (!password) {
+            alert('Please enter password!')
+            return false;
+        }
+    
+        var gender = document.getElementById("ddlgender").value;
+        var userObj = {
+            "name": txtname,
+            "email": email,
+            "password":password,
+            "gender": gender,
+
+        };
+        addUserDataToLocalStorage(userObj);
+        document.getElementById('txtname').value = "";
+        document.getElementById('txtemail').value = "";
+        document.getElementById('txtpassword').value = "";
+
+        bindUserData();
+    };
+    
+    function showEditRow(UserID) {
+        var userRow = document.getElementById(UserID); //this gives tr of  whose button was clicked
+        var trdata = userRow.querySelectorAll(".td-data");
+        /*returns array of all elements with
+        "row-data" class within the row with given id*/
+        var userID = trdata[0].innerHTML;
+        var userName = trdata[1].innerHTML;
+        var useremail = trdata[2].innerHTML;
+        var userPassword = trdata[3].innerHTML;
+        var userGender = trdata[4].innerHTML;
+        
+    
+        trdata[0].innerHTML = '<input name="txtuserid"  disabled id="txtuserid" value="' + userID + '"/>';
+        trdata[1].innerHTML = '<input name="txtname" id="txtname" value="' + userName + '"/>';
+        trdata[2].innerHTML = '<input name="txtemail" id="txtemail" value="' + useremail + '"/>';
+        trdata[3].innerHTML = '<input name="txtpassword" id="txtpassword" value="' + userpassword + '"/>';
+        if (userGender == 'male') {
+            trdata[4].innerHTML = '<select id="ddlgender"><option value="male">male</option><option value="female">female</option></select>';
+        }
+        else {
+            trdata[4].innerHTML = '<select id="ddlgender"><option value="female">female</option><option value="male">male</option></select>';
+        }
+        
+        trdata[5].innerHTML =
+            "<button class='btn btn-primary btn-xs btn-updateCustomer' onclick='updateUser(" + userID + ")'>" +
+            "<i class='fa fa-pencil' aria-hidden='true'></i>Update</button>"
+            + "<button class='btn btn-warning btn-xs btn-cancelupdate' onclick='cancel(" + userID + ")'><i class='fa fa-times' aria-hidden='true'></i>Cancel</button>"
+            + "<button class='btn btn-danger btn-xs btn-deleteCustomer' onclick='deleteUser(" + userID + ")'>"
+            + "<i class='fa fa-trash' aria-hidden='true'></i>Delete</button>"
+    }
+    function cancel(UserID) {
+        debugger;
+        var btneditId = "btnedit" + UserID;
+        var btndeleteId = "btndelete" + UserID;
+    
+        var CustomerRow = document.getElementById(UserID); //this gives tr of  whose button was clicked
+        var data = CustomerRow.querySelectorAll(".td-data");
+    
+        var name = CustomerRow.getAttribute("data-name");
+        var email = CustomerRow.getAttribute("data-email");
+        var password = CustomerRow.getAttribute("data-password");
+        var gender = CustomerRow.getAttribute("data-gender");
+        
+    
+        data[0].innerHTML = name;
+        data[1].innerHTML = email;
+        data[2].innerHTML = password;
+        data[3].innerHTML = gender;
+       
+        var actionbtn = "<button id='" + btneditId + "' class='btn btn-info btn-xs btn-editcustomer' onclick='showEditRow(" + UserID + ")'><i class='fa fa-pencil' aria-hidden='true'></i>Edit</button>" +
+            "<button id='" + btndeleteId + "' class='btn btn-danger btn-xs btn-deleteCustomer' onclick='deleteRow(" + UserID + ")'><i class='fa fa-trash' aria-hidden='true'>Delete</button>"
+        data[5].innerHTML = actionbtn;
+    }
+    function updateUser(UserID) {
+        var userRow = document.getElementById(UserID); //this gives tr of  whose button was clicked
+        var data = userRow.querySelectorAll(".td-data");
+        var name = data[1].querySelector("#txtname").value;
+        var email = data[2].querySelector("#txtemail").value;
+        var status = data[3].querySelector("#ddlpassword").value;
+        var gender = data[4].querySelector("#ddlgender").value;
+       
+        var userObj = {
+            "name": name,
+            "email": email,
+            "password": password,
+            "gender": gender,
+            
+        };
+        updateDataToLocalStorage(userObj);
+        bindUserData();
+    }
+    function deleteRow(UserID) {
+        deletedataFromLocalStorage(UserID);
+        bindUserData();
+    }
+    </script>
+    <br>
+ <footer class="bg-dark text-center text-white">
+        <!-- Grid container -->
+        <div class="container p-4 pb-0">
+          <!-- Section: Form -->
+          <section class="">
+            <form action="">
+              <!--Grid row-->
+              <div class="row d-flex justify-content-center">
+                <!--Grid column-->
+                <div class="col-auto">
+                  <p class="pt-2">
+                    <a href="Home.html" style="color:rgb(248, 244, 244)">
+                        <strong>Home</strong>
+                    </a>
+                  </p>
+                </div>
+                <div class="col-auto">
+                    <p class="pt-2">
+                        <a href="Sitemap.html" style="color:rgb(248, 244, 244)">
+                      <strong>Site map</strong>
+                    </a>
+                    </p>
+                  </div>
+                  <div class="col-auto">
+                    <p class="pt-2">
+                        <a href="Login.html" style="color:rgb(248, 244, 244)">
+                      <strong>Login</strong>
+                        </a>
+                    </p>
+                  </div>
+                  <div class="col-auto">
+                    <p class="pt-2">
+                        <a href="Signup.html" style="color:rgb(248, 244, 244)">
+                      <strong>Sign Up</strong>
+                        </a>
+                    </p>
+                </div>
+              </div>
+            </form>
+          </section>
+        </div>
+        <div class="text-center p-3" style="background-color: rgb(0, 0, 0);">
+            <a href="https://www.instagram.com"><img src="instagram.png" height="50px"></a>
+            <a href="https://www.twitter.com"><img src="twitter.png" height="50px"></a>
+            <a href="https://www.youtube.com"><img src="youtube.png" height="50px" style="margin-right: 3%;"></a>
+          <a class="text-white" href="#"> © 2023 DoBu Martial Arts</a>
+        </div>
+      </footer>
+      </body>
+</html>
